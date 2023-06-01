@@ -1,6 +1,7 @@
 """Support custom filters for jinja2 templating"""
 import ast
 import base64
+import hashlib
 import json
 import re
 import urllib.parse
@@ -253,6 +254,11 @@ def to_ascii_json(string):
     return json.dumps(string, ensure_ascii=False)
 
 
+def to_md5_hash(string):
+    """Convert string to MD5 hash"""
+    return hashlib.md5(string.encode("utf-8")).hexdigest()
+
+
 
 def init(*args):
     """Initialize filters"""
@@ -275,6 +281,7 @@ def init(*args):
     env.filters["ternary"] = ternary
     env.filters["shuffle"] = shuffle
     env.filters["to_ascii_json"] = to_ascii_json
+    env.filters["to_md5_hash"] = to_md5_hash
     env.globals["replace_all"] = replace_all
     env.globals["is_defined"] = is_defined
     env.globals["get_type"] = get_type
@@ -293,6 +300,7 @@ def init(*args):
     env.globals["ternary"] = ternary
     env.globals["shuffle"] = shuffle
     env.globals["to_ascii_json"] = to_ascii_json
+    env.globals["to_md5_hash"] = to_md5_hash
     return env
 
 
@@ -314,6 +322,7 @@ template._NO_HASS_ENV.filters["grab"] = grab
 template._NO_HASS_ENV.filters["reach"] = reach
 template._NO_HASS_ENV.filters["ternary"] = ternary
 template._NO_HASS_ENV.filters["shuffle"] = shuffle
+template._NO_HASS_ENV.filters["to_md5_hash"] = to_md5_hash
 template._NO_HASS_ENV.filters["to_ascii_json"] = to_ascii_json
 template._NO_HASS_ENV.globals["replace_all"] = replace_all
 template._NO_HASS_ENV.globals["is_defined"] = is_defined
@@ -333,6 +342,7 @@ template._NO_HASS_ENV.globals["reach"] = reach
 template._NO_HASS_ENV.globals["ternary"] = ternary
 template._NO_HASS_ENV.globals["shuffle"] = shuffle
 template._NO_HASS_ENV.globals["to_ascii_json"] = to_ascii_json
+template._NO_HASS_ENV.globals["to_md5_hash"] = to_md5_hash
 
 
 async def async_setup(hass, hass_config):
@@ -355,4 +365,5 @@ async def async_setup(hass, hass_config):
     tpl._env.globals = ternary
     tpl._env.globals = shuffle
     tpl._env.globals = to_ascii_json
+    tpl._env.globals = to_md5_hash
     return True
