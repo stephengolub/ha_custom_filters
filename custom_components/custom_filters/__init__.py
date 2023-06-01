@@ -259,7 +259,6 @@ def to_md5_hash(string):
     return hashlib.md5(string.encode("utf-8")).hexdigest()
 
 
-
 def init(*args):
     """Initialize filters"""
     env = _TemplateEnvironment(*args)
